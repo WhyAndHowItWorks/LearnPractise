@@ -10,31 +10,51 @@ namespace LearnPractiseXD
 
         static void Main(string[] args)
         {
+            // Пути к нужным файлам
+            Console.WriteLine("Введите путь к файлу с текстом");
+            string pathToOriginal = Console.ReadLine();
+            string pathToResult = @"c:\Users\PB\Desktop\Учебная практика 2022\Мое\Результат фильтрации.txt";
+            string pathToAnalize = @"c:\Users\PB\Desktop\Учебная практика 2022\Мое\Анализ текста.txt";
 
-
-            string path = @"c:\Users\PB\Desktop\Учебная практика 2022\Мое\Исходный файл.txt";
-            string originalText = File.ReadAllText(path);
-
-            string path1 = @"c:\Users\PB\Desktop\Учебная практика 2022\Мое\Результат фильтрации.txt";
-            string path2 = @"c:\Users\PB\Desktop\Учебная практика 2022\Мое\Анализ текста.txt";
-            float time = 0f;
-
-
-
-
-
+            // Получение текстов
+            string originalText = File.ReadAllText(pathToOriginal);
             string editedtext = originalText;
-            Stopwatch s = new Stopwatch();
-            s.Start();
-            string[] wordsmassive = SortText(editedtext, path1);
-            s.Stop();
-            time = s.ElapsedMilliseconds;
-            Analize(originalText, wordsmassive, time, path2);
+            // Заведение таймера и непосредственно работа алгоритма разрезки и сортировки
+            Stopwatch timer = new Stopwatch();
+            float time = 0f;
+            timer.Start();
+            string[] wordsmassive = SortText(editedtext, pathToResult);
+            timer.Stop();
+            time = timer.ElapsedMilliseconds;
+
+            // Выведение статистики 
+            Analize(originalText, wordsmassive, time, pathToAnalize);
         }
+
+        //Функция, разрезающая на части текст и сортирующая получившиеся слова. 
         static string[] SortText(string ORText, string Filepath)
         {
+
             FileInfo filt_file = new FileInfo(Filepath);
             StreamWriter ff = filt_file.CreateText();
+            // Удаляем ненужные символы
+            for (int t = 0; t < ORText.Length; t++)
+            {
+                short h = ((short)ORText[t]);
+                if (!(h == 44 || h == 46 || h == 1105 || (h > 1039 && h < 1104) || (h > 47 && h < 58)))
+                {
+                    ORText = ORText.Replace(ORText[t], ' ');
+                }
+
+            }
+
+            // Удаляем ненужные комбинации символов
+            ORText = ORText.Replace(" ,", " ");
+            ORText = ORText.Replace(", ", " ");
+            ORText = ORText.Replace(" .", " ");
+            ORText = ORText.Replace(". ", " ");
+
+
             // Разрезаем его на части по пробелам.
             int begin = 0;
             char space = ' ';
@@ -53,17 +73,13 @@ namespace LearnPractiseXD
                 }
             }
             List<string> clearwords = new List<string>();
-            // Редактируем получившиеся слова
+            // Редактируем получившиеся слова, удаляя пустые позиции
             for (int i = 0; i < words.Count; i++)
             {
-                // Необходимо заменить потом на что-то более адекватное.
-                words[i] = words[i].Replace(" ,", "");
-                words[i] = words[i].Replace(", ", "");
-                words[i] = words[i].Replace(".", "");
+
+
                 words[i] = words[i].Replace(" ", "");
-                words[i] = words[i].Replace("!", "");
-                words[i] = words[i].Replace("?", "");
-                words[i] = words[i].Replace("+", "");
+
                 if (words[i] != "")
                 {
                     clearwords.Add(words[i]);
@@ -74,10 +90,7 @@ namespace LearnPractiseXD
 
 
 
-            // сортируем
-            Stopwatch s = new Stopwatch();
-
-            Console.WriteLine(wordsMassive.Length);
+            // сортируем                            
             for (int i = 0; i < wordsMassive.Length; i++)
             {
                 for (int j = 0; j < wordsMassive.Length - 1; j++)
@@ -97,68 +110,47 @@ namespace LearnPractiseXD
 
 
 
-            // Находим конец части с числами
-            int g = 0;
-            while (true)
-            {
-                g++;
-                if (wordsMassive[g][0] > '9')
-                {
-                    break;
-                }
 
-            }
-            // Разрезаем массив на цифры и буквы
-            string[] chisla = new string[g];
-            for (int k = 0; k < chisla.Length; k++)
-            {
-                chisla[k] = wordsMassive[k];
-
-            }
-            string[] wordsPart = new string[wordsMassive.Length - g];
-            for (int k = 0; k < wordsPart.Length; k++)
-            {
-                wordsPart[k] = wordsMassive[k + g];
-
-            }
-            words = new List<string>();
-            // Сшиваем его по новому
-            foreach (string p in wordsPart)
-            {
-                words.Add(p);
-            }
-            foreach (string p in chisla)
-            {
-                words.Add(p);
-            }
-            wordsMassive = words.ToArray();
-
+            // Записываем их все в файлик          
             foreach (string p in wordsMassive)
             {
                 ff.WriteLine(p);
             }
             ff.Close();
+            // возвращаем получившийся массив
             return wordsMassive;
         }
+        // Анализируем работу функции сортировки
         static void Analize(string Original_text, string[] Edited_text, float time_spent, string PathToFile)
         {
 
+            // Открытие файла
             FileInfo filt_file = new FileInfo(PathToFile);
             StreamWriter ff = filt_file.CreateText();
             string alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя1234567890";
             // Выводим исходный текст
+            ff.WriteLine("Исходный текст выглядит следующим образом:");
+            Console.WriteLine("Исходный текст выглядит следующим образом:");
+            Console.WriteLine(Original_text);
             ff.WriteLine(Original_text);
             ff.WriteLine();
+            Console.WriteLine();
             // Описание Варианта
             ff.WriteLine("Вариант 1. Необходимо разрезать текст на части, затем отсортировать получившиеся слова по алфавиту. " +
                 "Числа также входят в сортировку. Порядок слов: от а до я, затем цифры.");
+            Console.WriteLine("Вариант 1. Необходимо разрезать текст на части, затем отсортировать получившиеся слова по алфавиту. " +
+                "Числа также входят в сортировку. Порядок слов: от а до я, затем цифры.");
             // Количество слов 
             ff.WriteLine("Количество слов в тексте: " + Edited_text.Length);
+            Console.WriteLine("Количество слов в тексте: " + Edited_text.Length);
             // Время сортировки
             ff.WriteLine("Время получившийся сортировки в миллисекундах: " + time_spent);
+            Console.WriteLine("Время получившийся сортировки в миллисекундах: " + time_spent);
             // Статистика 
             ff.WriteLine("Количество слов, начинающихся с конкретной буквы");
+            Console.WriteLine("Количество слов, начинающихся с конкретной буквы");
             int kolvo = 0;
+
             for (int i = 0; i < alphabet.Length; i++)
             {
                 kolvo = 0;
@@ -171,6 +163,7 @@ namespace LearnPractiseXD
                     }
                 }
                 ff.WriteLine(alphabet[i] + " : " + kolvo);
+                Console.WriteLine(alphabet[i] + " : " + kolvo);
             }
             ff.Close();
         }
