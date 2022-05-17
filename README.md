@@ -9,20 +9,26 @@
 
 Как прописать путь к файлу
 
+![](https://github.com/WhyAndHowItWorks/LearnPractise/blob/master/пути%20к%20файлам.png?raw=true)
+
+Как изменить пути к файлам(pathToResult - путь к файлу результату соритровки, pathToAnalize - путь к файлу анализу сортировки)
+
 ## Результат работы
 Если вы правильно ввели пути к файлам, то результат будет выгдядеть следующим образом.
 
-
+![](https://github.com/WhyAndHowItWorks/LearnPractise/blob/master/вывод%20в%20консоль.png?raw=true)
 
 Вывод в консоль
 
-
+![](https://github.com/WhyAndHowItWorks/LearnPractise/blob/master/результат%20сортировки.png?raw=true)
 
 Как выглядит файл записи итога сортировки
 
+![](https://github.com/WhyAndHowItWorks/LearnPractise/blob/master/Анализ.png?raw=true)
 
 Как выглядит файл анализа сортировки
 
+Также, в проекте добавлен пример исходного файла, результата сортировки и анализа сортировки в расширении txt.
 Если вы столкнулись с какой-либо ошибкой при работе с программой, напишите пожалуйста в комментариях проекта)
 
 # Версии программы
